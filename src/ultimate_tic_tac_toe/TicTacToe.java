@@ -6,7 +6,7 @@ import java.awt.event.KeyEvent;
  * Plays a game of Tic Tac Toe.
  * @author Alan Kwok https://github.com/atkwok
  */
-public class TicTacToe {
+public class TicTacToe extends TicTacToeGame {
   /**
    * pieces is the internal representation of the board
    *         0 is X, 1 is O, -1 is an empty space
@@ -28,7 +28,7 @@ public class TicTacToe {
   /**
    * Draws the board based on the configuration of Pieces
    */
-  private void drawBoard() {
+  protected void drawBoard() {
     for (int i = 0; i < pieces.length; i++) {
       for (int j = 0; j < pieces[0].length; j++) {
         if ((i + j) % 2 == 0) {
@@ -54,7 +54,7 @@ public class TicTacToe {
    * 
    * @return - Returns true if the game is over, and false otherwise.
    */
-  private boolean boardWon(int side) {
+  protected boolean boardWon(int side) {
 	  for (int i = 0; i < 3; i++) {
 		  if (pieces[i][0] == pieces[i][1] && pieces[i][1] == pieces[i][2] && pieces[i][1] == side) {
 			  System.out.println("Player " + side + " won!");
