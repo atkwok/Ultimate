@@ -47,6 +47,47 @@ public class TicTacToe extends TicTacToeGame {
   }
   
   /**
+   * 
+   */
+  public void playGame() {
+	int side = 0;
+	int prevX = -1;
+	int prevY = -1;
+	boolean turn_done = false;
+	boolean gameOver = false;
+	while (true) {
+	  this.drawBoard();
+	  if (StdDrawPlus.mousePressed()) {
+	    int x = (int) StdDrawPlus.mouseX();
+	    int y = (int) StdDrawPlus.mouseY();
+	    if (this.pieces[x][y] == -1) {
+		  if (prevX != -1 && prevY != -1) {
+		  	this.pieces[prevX][prevY] = -1;
+		  }
+		  this.pieces[x][y] = side;
+		  prevX = x;
+		  prevY = y;
+		  turn_done = true;
+		  StdDrawPlus.show(10);
+	      }
+	    } else if (StdDrawPlus.isSpacePressed() && turn_done) {
+	      side = 1 - side;
+	      turn_done = false;
+	      prevX = -1;
+	      prevY = -1;
+	    }
+	    StdDrawPlus.show(10);
+	    if (gameOver) {
+	      StdDrawPlus.show(5000);
+	      return;
+	    }
+	    if (this.gameWon(side)) {
+	      gameOver = true;
+	    }
+	 }
+  }
+  
+  /**
    * Determines whether the game is over after that player has moved.
    * If a player has won or if there is a tie, prints out 
    * 
@@ -54,7 +95,7 @@ public class TicTacToe extends TicTacToeGame {
    * 
    * @return - Returns true if the game is over, and false otherwise.
    */
-  protected boolean boardWon(int side) {
+  protected boolean gameWon(int side) {
 	  for (int i = 0; i < 3; i++) {
 		  if (pieces[i][0] == pieces[i][1] && pieces[i][1] == pieces[i][2] && pieces[i][1] == side) {
 			  System.out.println("Player " + side + " won!");
@@ -91,41 +132,6 @@ public class TicTacToe extends TicTacToeGame {
   public static void main(String[] args) {
     TicTacToe b = new TicTacToe();
     StdDrawPlus.setScale(0, 3);
-    int side = 0;
-    int prevX = -1;
-    int prevY = -1;
-    boolean turn_done = false;
-    boolean gameOver = false;
-    while (true) {
-      b.drawBoard();
-      if (StdDrawPlus.mousePressed()) {
-        int x = (int) StdDrawPlus.mouseX();
-        int y = (int) StdDrawPlus.mouseY();
-        if (b.pieces[x][y] == -1) {
-	        if (prevX != -1 && prevY != -1) {
-	        	b.pieces[prevX][prevY] = -1;
-	        }
-	        b.pieces[x][y] = side;
-	        prevX = x;
-	        prevY = y;
-	        turn_done = true;
-	        StdDrawPlus.show(10);
-        }
-      }
-      else if (StdDrawPlus.isSpacePressed() && turn_done) {
-        side = 1 - side;
-        turn_done = false;
-        prevX = -1;
-        prevY = -1;
-      }
-      StdDrawPlus.show(10);
-      if (gameOver) {
-    	  StdDrawPlus.show(5000);
-    	  return;
-      }
-      if (b.boardWon(side)) {
-    	  gameOver = true;
-      }
-    }
-  }	
+    b.playGame();
+  }
 }
