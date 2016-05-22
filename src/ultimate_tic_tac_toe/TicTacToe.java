@@ -71,18 +71,18 @@ public class TicTacToe extends TicTacToeGame {
 		  StdDrawPlus.show(10);
 	      }
 	    } else if (StdDrawPlus.isSpacePressed() && turn_done) {
-	      side = 1 - side;
 	      turn_done = false;
 	      prevX = -1;
 	      prevY = -1;
+	      if (this.gameWon(side)) {
+		    gameOver = true;
+		  }
+	      side = 1 - side;
 	    }
 	    StdDrawPlus.show(10);
 	    if (gameOver) {
 	      StdDrawPlus.show(5000);
 	      return;
-	    }
-	    if (this.gameWon(side)) {
-	      gameOver = true;
 	    }
 	 }
   }

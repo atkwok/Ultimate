@@ -93,19 +93,20 @@ public class UltimateTicTacToe extends TicTacToeGame {
 		        }
 			}
 			else if (StdDrawPlus.isSpacePressed() && turn_done) {
-				side = 1 - side;
-				turn_done = false;
+				this.boardWon(side, prevX, prevY);
 				this.updateCurrBoard(prevX, prevY);
+				if (this.gameWon(side)) {
+					gameOver = true;
+				}
 				prevX = -1;
 				prevY = -1;
+				side = 1 - side;
+				turn_done = false;
 			}
 			StdDrawPlus.show(10);
 			if (gameOver) {
 				StdDrawPlus.show(5000);
 				return;
-			}
-			if (this.gameWon(side)) {
-				gameOver = true;
 			}
 		}
 	}
@@ -118,11 +119,8 @@ public class UltimateTicTacToe extends TicTacToeGame {
 	 * @return
 	 */
 	protected boolean validMove(int x, int y) {
-		if (x == 3 || x == 7 || y == 3 || y == 7 || this.pieces[x][y] != -1) {
+		if (this.pieces[x][y] != -1 || x == 3 || x == 7 || y == 3 || y == 7) {
 			return false;
-		}
-		if (this.currBoardX == -1 || this.currBoardY == -1) {
-			return true; // if one is -1, the other should be also
 		}
 		int boardX;
 		int boardY;
@@ -133,9 +131,6 @@ public class UltimateTicTacToe extends TicTacToeGame {
 		} else {
 			boardX = 2;
 		}
-		if (boardX != this.currBoardX) {
-			return false;
-		}
 		if (y < 3) {
 			boardY = 0;
 		} else if (y < 7) {
@@ -143,7 +138,10 @@ public class UltimateTicTacToe extends TicTacToeGame {
 		} else {
 			boardY = 2;
 		}
-		if (boardY != this.currBoardY) {
+		if (boardX != this.currBoardX || boardY != this.currBoardY) {
+			if (this.currBoardX == -1 && this.currBoardY == -1 && this.boards[boardX][boardY] == -1) {
+				return true;
+			}
 			return false;
 		}
 		return true;
@@ -155,6 +153,24 @@ public class UltimateTicTacToe extends TicTacToeGame {
 	 * @param y
 	 */
 	protected void updateCurrBoard(int x, int y) {
+		if (x > 7) {
+			x--;
+		}
+		if (x > 3) {
+			x--;
+		}
+		if (y > 7) {
+			y--;
+		}
+		if (y > 3) {
+			y--;
+		}
+		this.currBoardX = x % 3;
+		this.currBoardY = y % 3;
+		if (this.boards[this.currBoardX][this.currBoardY] != -1) {
+			this.currBoardX = -1;
+			this.currBoardY = -1;
+		}
 		return;
 	}
 	
@@ -165,8 +181,55 @@ public class UltimateTicTacToe extends TicTacToeGame {
 	 * @param y
 	 * @return
 	 */
-	protected boolean boardWon(int side, int x, int y) {
-		return false;
+	protected void boardWon(int side, int x, int y) {
+		if (x < 3) {
+			x = 0;
+		} else if (x < 7) {
+			x = 4;
+		} else {
+			x = 8;
+		}
+		if (y < 3) {
+			y = 0;
+		} else if (y < 7) {
+			y = 4;
+		} else {
+			y = 8;
+		}
+		for (int i = 0; i < 3; i++) {
+			if (this.pieces[x + i][y] == this.pieces[x + i][y + 1] && 
+					this.pieces[x + i][y + 1] == this.pieces[x + i][y + 2] && 
+					this.pieces[x + i][y + 1] == side) {
+				this.boards[this.currBoardX][this.currBoardY] = side;
+				return;
+			}
+			if (this.pieces[x][y + i] == this.pieces[x + 1][y + i] && 
+					this.pieces[x + 1][y + i] == this.pieces[x + 2][y + i] && pieces[x + 1][y + i] == side) {
+				this.boards[this.currBoardX][this.currBoardY] = side;
+				return;
+			}
+		}
+		if ((this.pieces[x][y] == this.pieces[x + 1][y + 1] && 
+				this.pieces[x + 1][y + 1] == this.pieces[x + 2][y + 2] ||
+				this.pieces[x + 2][y] == this.pieces[x + 1][y + 1] && 
+				this.pieces[x + 1][y + 1] == this.pieces[x][y + 2]) 
+				&& this.pieces[x + 1][y + 1] == side) {
+			this.boards[this.currBoardX][this.currBoardY] = side;
+			return;
+		}
+		int total = 0;
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j ++) {
+				if (this.pieces[x + i][y + j] >= 0) {
+					total++;
+				}
+			}
+		}
+		if (total == 9) {
+			this.boards[this.currBoardX][this.currBoardY] = 3;
+			return;
+		}
+		return;
 	}
 	
 	/**
@@ -180,12 +243,14 @@ public class UltimateTicTacToe extends TicTacToeGame {
 	protected boolean gameWon(int side) {
 		for (int i = 0; i < 3; i++) {
 			if (this.boards[i][0] == this.boards[i][1] && 
-					this.boards[i][1] == this.boards[i][2] && boards[i][1] == side) {
+					this.boards[i][1] == this.boards[i][2] && 
+					this.boards[i][1] == side) {
 				System.out.println("Player " + side + " won!");
 					return true;
 			}
 			if (this.boards[0][i] == this.boards[1][i] && 
-					this.boards[1][i] == this.boards[2][i] && boards[1][i] == side) {
+					this.boards[1][i] == this.boards[2][i] && 
+					this.boards[1][i] == side) {
 				System.out.println("Player " + side + " won!");
 				return true;
 			}
