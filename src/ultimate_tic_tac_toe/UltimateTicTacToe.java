@@ -42,17 +42,33 @@ public class UltimateTicTacToe extends TicTacToeGame {
 	 * Draws the board based on the configuration of the pieces.
 	 */
 	protected void drawBoard() {
+		int x = 0;
+		int y = 0;
 		for (int i = 0; i < 11; i ++) {
+			if (i == 3 || i == 7) {
+				x++;
+			}
 			for (int j = 0; j < 11; j ++) {
+				if (j == 3 || j == 7) {
+					y++;
+				}
 				if (i == 3 || i == 7 || j == 3 || j == 7) {
 					StdDrawPlus.setPenColor(StdDrawPlus.BLUE);
 					StdDrawPlus.filledSquare(i + .5, j + .5, .5);
 					// Add png file for grid maybe?
 					continue;
 				} else if ((i + j) % 2 == 0) {
-					StdDrawPlus.setPenColor(StdDrawPlus.LIGHT_GRAY);
+					if (this.currBoardX == x && this.currBoardY == y) {
+						StdDrawPlus.setPenColor(StdDrawPlus.GREEN);
+					} else {
+						StdDrawPlus.setPenColor(StdDrawPlus.LIGHT_GRAY);
+					}
 			    } else {
-			    	StdDrawPlus.setPenColor(StdDrawPlus.CYAN);
+			    	if (this.currBoardX == x && this.currBoardY == y) {
+			    		StdDrawPlus.setPenColor(StdDrawPlus.YELLOW);
+			    	} else {
+			    		StdDrawPlus.setPenColor(StdDrawPlus.CYAN);
+			    	}
 			    }
 			    StdDrawPlus.filledSquare(i + .5, j + .5, .5);
 			    if (this.pieces[i][j] == 0) {
@@ -61,6 +77,7 @@ public class UltimateTicTacToe extends TicTacToeGame {
 			    	StdDrawPlus.picture(i + .5, j + .5, "src/img/o.png", 1, 1);
 			    }
 			}
+			y = 0;
 		}
 		return;
 	}
