@@ -9,8 +9,8 @@ public class Semaphores extends TicTacToeGame{
 	
 	/**
 	 * pieces is the internal 3x5 representation of the board. 
-	 * 0 represents an empty space, 1 represents a blue piece,
-	 * 2 represents a green piece, and 3 represents a red piece.
+	 * 0 represents an empty space, 1 represents a blue o,
+	 * 2 represents a red x, and 3 represents a red x on top of a blue o.
 	 */
 	private int[][] pieces;
 	
@@ -32,20 +32,24 @@ public class Semaphores extends TicTacToeGame{
 	 */
 	@Override
 	protected void drawBoard() {
-		for (int i = 0; i < 3; i ++) {
+		for (int i = 0; i < 5; i ++) {
 			for (int j = 0; j < 5; j ++) {
+				if (i == 0 || i == 4) {
+					continue;
+				}
 				if ((i + j) % 2 == 0) {
 					StdDrawPlus.setPenColor(StdDrawPlus.LIGHT_GRAY);
 				} else {
 					StdDrawPlus.setPenColor(StdDrawPlus.CYAN);
 				}
 				StdDrawPlus.filledSquare(i + .5, j + .5, .5);
-			    if (this.pieces[i][j] == 1) {
-			    	StdDrawPlus.picture(i + .5, j + .5, "src/img/s1.png", 1, 1);
-			    } else if (this.pieces[i][j] == 2) {
-			    	StdDrawPlus.picture(i + .5, j + .5, "src/img/s2.png", 1, 1);
-			    } else if (this.pieces[i][j] == 3) {
-			    	StdDrawPlus.picture(i + .5, j + .5, "src/img/s3.png", 1, 1);
+			    if (this.pieces[i - 1][j] == 1) {
+			    	StdDrawPlus.picture(i + .5, j + .5, "src/img/o.png", 1, 1);
+			    } else if (this.pieces[i - 1][j] == 2) {
+			    	StdDrawPlus.picture(i + .5, j + .5, "src/img/x.png", 1, 1);
+			    } else if (this.pieces[i - 1][j] == 3) {
+			    	StdDrawPlus.picture(i + .5, j + .5, "src/img/o.png", 1, 1);
+			    	StdDrawPlus.picture(i + .5, j + .5, "src/img/x.png", 1, 1);
 			    }
 			}
 		}
@@ -57,7 +61,31 @@ public class Semaphores extends TicTacToeGame{
 	 */
 	@Override
 	protected boolean gameWon(int side) {
-		// TODO Auto-generated method stub
+		// checks verticals (will be horizontals once I flip board)
+		for (int i = 0; i < 3; i ++) {
+			for (int j = 0; j < 3; j ++) {
+				if (this.pieces[i][j] > 0 && this.pieces[i][j] == this.pieces[i][j + 1] && this.pieces[i][j] == this.pieces[i][j + 2]) {
+					System.out.println("Player " + side + " won!");
+					return true;
+				}
+			}
+		}
+		// checks horizontals (will be verticals once flipped
+		for (int j = 0; j < 5; j ++) {
+			if (this.pieces[0][j] > 0 && this.pieces[0][j] == this.pieces[1][j] && this.pieces[0][j] == this.pieces[2][j]) {
+				System.out.println("Player " + side + " won!");
+				return true;
+			}
+		}
+		// checks diagonals. needs editting once flipped
+		for (int j = 0; j < 3; j ++) {
+			if (this.pieces[1][j + 1] > 0 && 
+					(this.pieces[0][j] == this.pieces[1][j + 1] && this.pieces[1][j + 1] == this.pieces[2][j + 2]) || 
+					this.pieces[2][j] == this.pieces[1][j + 1] && this.pieces[0][j + 2] == this.pieces[1][j + 1]) {
+				System.out.println("Player " + side + " won!");
+				return true;				
+			}
+		}
 		return false;
 	}
 	
@@ -89,7 +117,7 @@ public class Semaphores extends TicTacToeGame{
 		while (true) {
 			this.drawBoard();
 			if (StdDrawPlus.mousePressed()) {
-				x = (int) StdDrawPlus.mouseX();
+				x = (int) StdDrawPlus.mouseX() - 1;
 		        y = (int) StdDrawPlus.mouseY();
 		        if (this.validMove(x, y)) {
 			        if (prevX != -1 && prevY != -1) {
@@ -125,7 +153,7 @@ public class Semaphores extends TicTacToeGame{
 	 */
 	public static void main(String[] args) {
 		Semaphores b = new Semaphores();
-		StdDrawPlus.setXscale(0, 3);
+		StdDrawPlus.setXscale(0, 5);
 		StdDrawPlus.setYscale(0, 5);
 		b.playGame();
 	}

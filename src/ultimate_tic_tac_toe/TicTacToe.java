@@ -1,7 +1,5 @@
 package ultimate_tic_tac_toe;
 
-import java.awt.event.KeyEvent;
-
 /**
  * Plays a game of Tic Tac Toe.
  * @author Alan Kwok https://github.com/atkwok

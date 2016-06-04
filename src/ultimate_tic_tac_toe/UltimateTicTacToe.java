@@ -1,7 +1,5 @@
 package ultimate_tic_tac_toe;
 
-import java.awt.event.KeyEvent;
-
 /**
  * Plays a game of Ultimate Tic Tac Toe
  * @author Alan Kwok https://github.com/atkwok
@@ -266,7 +264,7 @@ public class UltimateTicTacToe extends TicTacToeGame {
 					this.boards[i][1] == this.boards[i][2] && 
 					this.boards[i][1] == side) {
 				System.out.println("Player " + side + " won!");
-					return true;
+				return true;
 			}
 			if (this.boards[0][i] == this.boards[1][i] && 
 					this.boards[1][i] == this.boards[2][i] && 
