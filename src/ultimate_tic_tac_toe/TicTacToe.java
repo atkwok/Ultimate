@@ -28,6 +28,7 @@ public class TicTacToe extends TicTacToeGame {
   /**
    * Draws the board based on the configuration of Pieces
    */
+  @Override
   protected void drawBoard() {
     for (int i = 0; i < pieces.length; i++) {
       for (int j = 0; j < pieces[0].length; j++) {
@@ -49,6 +50,7 @@ public class TicTacToe extends TicTacToeGame {
   /**
    * 
    */
+  @Override
   public void playGame() {
 	int side = 0;
 	int prevX = -1;
@@ -95,6 +97,7 @@ public class TicTacToe extends TicTacToeGame {
    * 
    * @return - Returns true if the game is over, and false otherwise.
    */
+  @Override
   protected boolean gameWon(int side) {
 	  for (int i = 0; i < 3; i++) {
 		  if (pieces[i][0] == pieces[i][1] && pieces[i][1] == pieces[i][2] && pieces[i][1] == side) {
