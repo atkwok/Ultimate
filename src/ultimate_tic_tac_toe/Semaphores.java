@@ -18,7 +18,12 @@ public class Semaphores extends TicTacToeGame{
 	 * 
 	 */
 	public Semaphores() {
-		
+		this.pieces = new int[3][5];
+		for (int i = 0; i < 3; i ++) {
+			for (int j = 0; j < 5; j ++) {
+				this.pieces[i][j] = 0;
+			}
+		}
 	}
 	
 
@@ -27,7 +32,23 @@ public class Semaphores extends TicTacToeGame{
 	 */
 	@Override
 	protected void drawBoard() {
-		// TODO Auto-generated method stub
+		for (int i = 0; i < 3; i ++) {
+			for (int j = 0; j < 5; j ++) {
+				if ((i + j) % 2 == 0) {
+					StdDrawPlus.setPenColor(StdDrawPlus.LIGHT_GRAY);
+				} else {
+					StdDrawPlus.setPenColor(StdDrawPlus.CYAN);
+				}
+				StdDrawPlus.filledSquare(i + .5, j + .5, .5);
+			    if (this.pieces[i][j] == 1) {
+			    	StdDrawPlus.picture(i + .5, j + .5, "src/img/s1.png", 1, 1);
+			    } else if (this.pieces[i][j] == 2) {
+			    	StdDrawPlus.picture(i + .5, j + .5, "src/img/s2.png", 1, 1);
+			    } else if (this.pieces[i][j] == 3) {
+			    	StdDrawPlus.picture(i + .5, j + .5, "src/img/s3.png", 1, 1);
+			    }
+			}
+		}
 		
 	}
 
@@ -42,10 +63,60 @@ public class Semaphores extends TicTacToeGame{
 	
 	/**
 	 * 
+	 * @param x
+	 * @param y
+	 * @return
+	 */
+	protected boolean validMove(int x, int y) {
+		if (this.pieces[x][y] == 3) {
+			return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * 
 	 */
 	@Override
 	public void playGame() {
-		// TODO Auto-generated method stub
+		int side = 0;
+		int prevX = -1;
+		int prevY = -1;
+		int x;
+		int y;
+		boolean turn_done = false;
+		boolean gameOver = false;
+		while (true) {
+			this.drawBoard();
+			if (StdDrawPlus.mousePressed()) {
+				x = (int) StdDrawPlus.mouseX();
+		        y = (int) StdDrawPlus.mouseY();
+		        if (this.validMove(x, y)) {
+			        if (prevX != -1 && prevY != -1) {
+			        	this.pieces[prevX][prevY] --;
+			        }
+			        this.pieces[x][y] ++;
+			        prevX = x;
+			        prevY = y;
+			        turn_done = true;
+			        StdDrawPlus.show(10);
+		        }
+			}
+			else if (StdDrawPlus.isSpacePressed() && turn_done) {
+				if (this.gameWon(side)) {
+					gameOver = true;
+				}
+				prevX = -1;
+				prevY = -1;
+				side = 1 - side;
+				turn_done = false;
+			}
+			StdDrawPlus.show(10);
+			if (gameOver) {
+				StdDrawPlus.show(5000);
+				return;
+			}
+		}
 		
 	}
 
