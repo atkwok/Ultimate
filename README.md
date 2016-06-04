@@ -1,7 +1,7 @@
 # UltimateUltimateTicTacToe
 
 This project (when done) should include the games Tic Tac Toe, Ultimate Tic Tac Toe, and Ultimate Ultimate Tic Tac Toe
-with simple AIs implemented. 
+with simple AIs implemented. Edit: Added Semaphores. will write rules in later.
 The rules of Tic Tac Toe are as usual.
 The rules for Ultimate Tic Tac Toe are also the standard ones - First turn player can move anywhere. Every turn after
 player moves in the corresponding board to where last player moved on the smaller board. In the case of a completed
